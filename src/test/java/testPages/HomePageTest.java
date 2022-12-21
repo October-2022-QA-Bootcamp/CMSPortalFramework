@@ -6,7 +6,9 @@ import BaseUtil.BaseClass;
 public class HomePageTest extends BaseClass{
 	
 	// The test executed based on alphabetically if no priority given
-	
+	// enabled = true means The test case is not disable
+	// enabled = false means The test case is disable
+	// priority = 1 means, this test case will run first
 	@Test (enabled = true, priority = 3)
 	public void clickLoginButtonTest () throws InterruptedException {
 		homePage.clickLoginButton();
