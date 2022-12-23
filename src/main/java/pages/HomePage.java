@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import static common.CommonActions.*;
 
 public class HomePage {
 	WebDriver driver;
@@ -28,8 +29,20 @@ public class HomePage {
 	@FindBy (how = How.NAME, using = "pass-d")
 	WebElement password;
 	
+	// Use of 'className' attribute as locator
 	@FindBy (className = "cms-newuser-reg")
 	WebElement newUserRegistration;
+	
+	@FindBy (className = "cms-newuser-registration")
+	WebElement IncorrectNewUserRegistration;
+	
+	// Use of xpath as locator 
+	@FindBy(xpath = "//a[text()='User ID']")
+	WebElement forgotUserId;
+	
+	
+	
+	
 	
 	public void clickLoginButton () throws InterruptedException {
 		loginButton.click();
@@ -48,13 +61,41 @@ public class HomePage {
 	
 	public void clickNewUserRegistration () throws InterruptedException {
 		newUserRegistration.click();
-		Thread.sleep(3000);
+		Thread.sleep(6000);
 	}
 	
+	// If your Internet is slow, you can see the action of the pageLoadTimeout(), you can see it is taking 20 seconds to load the page
+	// it shows error
 	
+	public void incorrectNewUserRegistrationClick(){
+		IncorrectNewUserRegistration.click();
+	}
 	
+	// click method is used from CommonActions
+	public void forgotUserIdClick() {
+		clickElement(forgotUserId);
+	}
 	
+	// We are using sendKeys() to input text
+	// here instead of throws , we are using try catch block
+	// No relation of try catch with sendKeys()
+	public void inputTextInUserIdField ()  {
+		try {
+		userId.sendKeys("Enthrall October 2022");
+		Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	// I used 2 common actions method
+	public void inputTextInUserIdAndPasswordFieldThenClickLoginButton () throws InterruptedException {
+		inputText(userId, "Enthrall October 2022");
+		inputText(password, "Enthrall@123454");
+		Thread.sleep(6000);
+		clickElement(loginButton);
+		Thread.sleep(6000);
+	}
 	
 	
 
