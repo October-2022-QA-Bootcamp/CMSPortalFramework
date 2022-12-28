@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,9 @@ public class HomePage {
 		// PageFactory help to instantiate WebElements
 		PageFactory.initElements(driver, this);
 	}
+	
+	@FindBy(css = "em.cms-icon.cms-sprite-loggedout.ms-3")
+	WebElement logo;
 	
 	// 1st way: Most common way to write the WebElement (@FindBy), you must know how to do that
 	// Use of 'Id' attribute as locator
@@ -40,8 +44,17 @@ public class HomePage {
 	@FindBy(xpath = "//a[text()='User ID']")
 	WebElement forgotUserId;
 	
+	// 3rd way to write the WebElement: not common, here forgotUserId, I used
+	By unlock = By.xpath("//a[contains(text(), 'unl')]"); 
+	// see line no: 114
 	
 	
+	
+	public boolean logoDisplayed() {
+		boolean flag = logo.isDisplayed();
+		System.out.println("The logo is Displayed? Ans: " + flag);
+		return flag;
+	}
 	
 	
 	public void clickLoginButton () throws InterruptedException {
@@ -64,8 +77,9 @@ public class HomePage {
 		Thread.sleep(6000);
 	}
 	
-	// If your Internet is slow, you can see the action of the pageLoadTimeout(), you can see it is taking 20 seconds to load the page
-	// it shows error
+	// If your Internet is slow, you can see the action of the pageLoadTimeout(), 
+	// you can see it is taking 20 seconds to load the page
+	// Then shows error/exception
 	
 	public void incorrectNewUserRegistrationClick(){
 		IncorrectNewUserRegistration.click();
@@ -95,6 +109,10 @@ public class HomePage {
 		Thread.sleep(6000);
 		clickElement(loginButton);
 		Thread.sleep(6000);
+	}
+	
+	public void clickUnlock () {
+		driver.findElement(unlock).click();
 	}
 	
 	
