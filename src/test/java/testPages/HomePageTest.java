@@ -5,6 +5,7 @@ import static common.CommonActions.*;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -248,7 +249,7 @@ public class HomePageTest extends BaseClass{
 	}
 	
 	// We use New User Registration web element to see the text of the web element
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void use_of_getText_method () {
 		WebElement nur = driver.findElement(By.className("cms-newuser-reg"));
 		System.out.println("The Text for the Web Element is: " + nur.getText());
@@ -276,10 +277,11 @@ public class HomePageTest extends BaseClass{
 	}
 	
 	// CMS doesn't have search field, so we will direct to Amazon page
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_sendKeys_method_then_click_submit_and_then_clear() throws InterruptedException {
 		Thread.sleep(5000);
-		// directing to Amazon.com
+		// directing to Amazon.com but this you will never see in industry
+		// I did it just for emergency
 		driver.get("https://www.amazon.com/");
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
@@ -298,6 +300,45 @@ public class HomePageTest extends BaseClass{
 		driver.findElement(By.xpath("//input[@id='nav-search-submit-button']")).click();
 		Thread.sleep(5000);
 		
+	}
+	
+	// search field
+	// enter_key = Enter/Return button in your laptop/desktop
+	@Test(enabled = false)
+	public void use_of_sendKeys_method_then_click_by_enter_key_or_button_and_then_clear () throws InterruptedException {
+		Thread.sleep(5000);
+		// directing to Amazon.com but this you will never see in industry
+		// I did it just for emergency
+		driver.get("https://www.amazon.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Writing text in search field and press Enter button
+		driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']")).sendKeys("Apple Watch", Keys.ENTER);
+		Thread.sleep(5000);
+		// You don't need to click on submit button
+		// driver.findElement(By.xpath("//input[@id='nav-search-submit-button']")).click();
+		// Thread.sleep(5000);
+		driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']")).clear();
+		Thread.sleep(5000);
+		// Writing text in search field and press on Return button
+		driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']")).sendKeys("Airpod Pro", Keys.RETURN);
+		Thread.sleep(5000);
+		// You don't need to click on submit button
+		// driver.findElement(By.xpath("//input[@id='nav-search-submit-button']")).click();
+		// Thread.sleep(5000);
+	}
+	
+	@Test(enabled = false)
+	public void use_of_navigate_method () throws InterruptedException {
+		Thread.sleep(5000);
+		driver.navigate().to("https://www.amazon.com");
+		Thread.sleep(5000);
+		driver.navigate().back();
+		Thread.sleep(5000);
+		driver.navigate().forward();
+		Thread.sleep(5000);
+		driver.navigate().refresh();
+		Thread.sleep(5000);
 	}
 	
 	
