@@ -5,13 +5,24 @@ import static common.CommonActions.*;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import BaseUtil.BaseClass;
 
 public class HomePageTest extends BaseClass{
+	
+	Dimension dimension;
+	Actions actions;
+	Select select;
+	
 	
 	// The test executed based on alphabetically if no priority given
 	// enabled = true means The test case is not disable
@@ -249,7 +260,7 @@ public class HomePageTest extends BaseClass{
 	}
 	
 	// We use New User Registration web element to see the text of the web element
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_getText_method () {
 		WebElement nur = driver.findElement(By.className("cms-newuser-reg"));
 		System.out.println("The Text for the Web Element is: " + nur.getText());
@@ -341,13 +352,301 @@ public class HomePageTest extends BaseClass{
 		Thread.sleep(5000);
 	}
 	
+	// Very important interview question
+	// How can you reset a window size? or they can ask how you can change the screen size by selenium
+	@Test(enabled = false)
+	public void use_of_set_specific_size_in_a_window() throws InterruptedException {
+		Thread.sleep(3000);
+		// Will get the size of cms window
+		// System.out.println("The size of the maximize screen is: "+ driver.manage().window().getSize());
+		dimension = new Dimension(800, 500);
+		driver.manage().window().setSize(dimension);
+		driver.navigate().to("https://www.cvs.com");
+		Thread.sleep(4000);
+		System.out.println("The size of the set screen is: "+ driver.manage().window().getSize());
+		driver.manage().window().maximize();
+		Thread.sleep(5000);
+		System.out.println("The size of the maximize screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(5000);
+		driver.manage().window().setSize(dimension); // just to show again the set size
+		Thread.sleep(5000);
+		System.out.println("The size of the set screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(5000);
+		driver.manage().window().fullscreen();
+		Thread.sleep(5000);
+		System.out.println("The size of the full screen is: "+ driver.manage().window().getSize());				
+	}
 	
+	// not important at all
+	@SuppressWarnings("deprecation")
+	@Test(enabled = false)
+	public void use_of_set_script_timeout_for_window() {
+        driver.manage().timeouts().setScriptTimeout(Duration.ofSeconds(15));
+        // setScriptTimeout () method deprecated, so giving you warning, this method is going to be out from selenium
+        // you use @SuppressWarnings("deprecation")
+		driver.get("https://www.ebay.com");		
+
+	}
 	
+	@Test(enabled = false)
+	public void logoDisplayedTest1() {
+		homePage.logoDisplayed();
+		Assert.assertTrue(true, "Application Logo is not Displayed ..... ..... ");
+	}
 	
+	// Web Element: logo (mount sinai)
+	@Test(enabled = false)
+	public void role1_use_of_hard_assert_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement logo = driver.findElement(By.xpath("//img[@alt='Mount Sinai']"));
+		boolean flag2 = logo.isDisplayed();
+		System.out.println("Is the logo displayed? Ans: "+flag2);
+		Assert.assertTrue(true, "Application Logo is not displayed .....");	// error message will be appeared when the assertion failed 
+	}
 	
+	// Web Element: logo (mount sinai)
+	@Test(enabled = false)
+	public void role2_use_of_hard_assert_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement logo = driver.findElement(By.xpath("//img[@alt='Mount Sinai']"));
+		boolean flag = logo.isDisplayed();
+		// System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertFalse(false, "Application Logo is not displayed .....");	// error message will be appeared when the assertion failed 
+	}
 	
+	// Web Element: logo (mount sinai)
+	// This test case will be failed
+	@Test(enabled = false)
+	public void role3_use_of_hard_assert_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement logo = driver.findElement(By.xpath("//img[@alt='Mount Sinai']"));
+		boolean flag = logo.isDisplayed();
+		// System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertFalse(true, "Application Logo is not displayed .....");	// error message will be appeared when the assertion failed 
+	}
 	
+	// A regular title test
+	@Test(enabled = false)
+	public void use_of_getTitle_method01() throws InterruptedException {
+		Thread.sleep(5000);	
+		System.out.println("The title of the Page is: " + driver.getTitle());
+	}
 	
+	// Will Pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion01() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	// Will Fail
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion02() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  // Hard Assertion, execution stopped here if Assertion fail
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	// Will Pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_soft_assertion() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(actual, expected, "Home Page Title doesn't match ....... "); 
+		// Soft Assertion, execution will not stopped here if Assertion is failed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	// Hover Action or Mouse Hover Over action
+	@Test(enabled = false)
+	public void use_of_mouse_hoverAction_on_aboutUs() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		// To do the mouse hove action, we use Actions class
+		actions = new Actions(driver);
+		WebElement aboutUs = driver.findElement(By.xpath("//a[normalize-space(text())='About Us' and @class= 'hidden-xs dropdown']"));
+		Thread.sleep(5000);	
+		actions.moveToElement(aboutUs).build().perform();  // this syntax interview question
+		Thread.sleep(4000);
+		
+	}
+	
+	// similar like above, nothing different, extra example
+	@Test(enabled = false)
+	public void use_of_mouse_hoverAction_on_ourLocations () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		Actions actions = new Actions(driver); // very important interview question
+		WebElement ourLocations = driver.findElement(By.xpath("//a[normalize-space(text())='Our Locations' and @class='hidden-xs dropdown']"));
+		Thread.sleep(2000);
+		actions.moveToElement(ourLocations).build().perform();
+		Thread.sleep(6000);	
+		System.out.println("\nThe text of this web element is: "+ ourLocations.getText());
+	}
+	
+	// CMS dropdown Application doesn't work because it's created dynamically by angular framework
+	
+	// drop down, all categories
+	// drop down is a commonly asked interview question
+	// here - using selectByIndex() method
+	// This method is not suggested, or not used much
+	// Because, adding a new web element or deleting a new one change the index number
+	@Test(enabled=false)
+	public void use_of_dropdown_selectByIndex_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.ebay.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement dropElement1 = driver.findElement(By.xpath("//select[@id='gh-cat']"));
+		select = new Select(dropElement1);
+		select.selectByIndex(10);
+		Thread.sleep(4000);
+	}
+
+	
+	// drop down, all categories
+	// drop down is a commonly asked interview question
+	// Most commonly use method in drop down --> selectByVisibleText()
+	@Test(enabled=false)
+	public void use_of_dropdown_selectByVisisbleText_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.ebay.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement droElement2 = driver.findElement(By.xpath("//select[@id='gh-cat']"));
+		select = new Select(droElement2);
+		select.selectByVisibleText("Books");
+		Thread.sleep(4000);
+	}
+	
+	// drop down, all categories
+	// drop down is a commonly asked interview question
+	// use method --> selectByValue()
+	@Test(enabled=false)
+	public void use_of_dropdown_selectByValue_method () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.ebay.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement dropElement3 = driver.findElement(By.name("_sacat"));
+		select = new Select(dropElement3);
+		select.selectByValue("15032");
+		Thread.sleep(5000);		
+	}
+	
+	// Regular click method
+	@Test(enabled = false)
+	public void use_of_click_method_in_loginButtonTest () throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).click();
+		Thread.sleep(3000);
+	}
+	
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest01() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.ENTER);
+		Thread.sleep(3000);
+	}
+	
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest02() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.RETURN);
+		Thread.sleep(3000);
+	}
+	
+
+	// alternate of click()
+	@Test(enabled = true)
+	public void alternate_of_click_method_in_loginButtonTest03() throws InterruptedException {
+		WebElement loginBtn = driver.findElement(By.id("cms-login-submit"));
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click()", loginBtn);
+		Thread.sleep(4000);
+	}
+	
+	// alternate of click()
+	// "arguments[0].click()" --- easy to memorize, memorize it, if you want
+	// follow the above one, because you can use any kind of locator 
+	// (specially xpath is difficult to create by below one)
+	// Que: what is the alternative of click() method or click an web element 
+	// or how to find a hidden web element-- very important interview question 
+	// don't follow this one, but if you ever see it, i hope you can recognize it
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest04() {
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("document.getElementById('cms-login-submit').click();");
+	}
+	
+	// From here till end, this is high level, so just see, don't take them seriously
+	// alternative to click an web element in many ways (never memorize, a collection of code)
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest06() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.click(homepageLoginButton).perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest07() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.moveToElement(homepageLoginButton).click().perform();
+	}
+
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest08() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.clickAndHold(homepageLoginButton).release().perform();
+	}
+
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest09() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.sendKeys(homepageLoginButton, Keys.RETURN).perform();
+	}
+
+
+
+
+
 	
 	
 	
