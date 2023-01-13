@@ -2,10 +2,15 @@ package BaseUtil;
 
 import java.time.Duration;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -15,9 +20,14 @@ import utils.Configuration;
 import static utils.IConstant.*;
 
 public class BaseClass {
-	public WebDriver driver;
-	public HomePage homePage; // or protected type
+	protected WebDriver driver;
+	protected HomePage homePage; // or protected type
 	Configuration config;
+	protected JavascriptExecutor js;
+	protected WebDriverWait wait;
+	protected Dimension dimension;
+	protected Actions actions;
+	protected Select select;
 	
 	@BeforeMethod
 	public void setUp (){
@@ -82,6 +92,8 @@ public class BaseClass {
 		
 		config = new Configuration();
 		initDriver();
+		js = (JavascriptExecutor)driver;
+		actions = new Actions(driver);
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		//driver.get("https://portal.cms.gov/portal/");
@@ -90,9 +102,11 @@ public class BaseClass {
 		// how to convert String to long ----> Long.parseLong()
 		long pageLoadTime =	Long.parseLong(config.getProperty(PAGELOAD_WAIT));
 		long implicitlyWait =	Long.parseLong(config.getProperty(IMPLICITLY_WAIT));
+		long explicitlyWait =	Long.parseLong(config.getProperty(EXPLICITLY_WAIT));
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTime));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitlyWait));
-		homePage = new HomePage(driver);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(explicitlyWait));
+		initClasses();
 	}
 	
 	
@@ -105,7 +119,7 @@ public class BaseClass {
 			driver = new ChromeDriver();
 			break;
 		case FIREFOX:
-			System.setProperty("webdriver.gecko.driver",  "./driver/gecodriver.exe");
+			System.setProperty("webdriver.gecko.driver",  "./driver/geckodriver.exe");
 			driver = new FirefoxDriver();
 			break;
 		case EDGE:
@@ -117,15 +131,11 @@ public class BaseClass {
 			driver = new ChromeDriver();
 			break;
 		}
-		
-		
-		
-		
 	}
 	
-	
-	
-	
+	private void initClasses () {
+		homePage = new HomePage(driver);
+	}
 	
 	@AfterMethod
 	public void tearUp () {
@@ -134,4 +144,5 @@ public class BaseClass {
 	
 	
 
+	
 }

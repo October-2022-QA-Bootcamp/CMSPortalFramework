@@ -48,6 +48,10 @@ public class HomePage {
 	By unlock = By.xpath("//a[contains(text(), 'unl')]"); 
 	// see line no: 114
 	
+	// for logger test
+	@FindBy (name = "user-d-wrong")
+	WebElement wrongUserId;
+	
 	
 	
 	public boolean logoDisplayed() {
@@ -105,6 +109,15 @@ public class HomePage {
 	// I used 2 common actions method
 	public void inputTextInUserIdAndPasswordFieldThenClickLoginButton () throws InterruptedException {
 		inputText(userId, "Enthrall October 2022");
+		inputText(password, "Enthrall@123454");
+		Thread.sleep(6000);
+		clickElement(loginButton);
+		Thread.sleep(6000);
+	}
+	
+	// To test logger if web element is not correct
+	public void loggerNegativeMethod () throws InterruptedException {
+		inputText(wrongUserId, "Enthrall October 2022");
 		inputText(password, "Enthrall@123454");
 		Thread.sleep(6000);
 		clickElement(loginButton);
